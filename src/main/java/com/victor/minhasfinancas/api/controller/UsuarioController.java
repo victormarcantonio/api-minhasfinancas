@@ -1,9 +1,13 @@
 package com.victor.minhasfinancas.api.controller;
 
+import java.math.BigDecimal;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,6 +17,7 @@ import com.victor.minhasfinancas.api.dto.UsuarioDTO;
 import com.victor.minhasfinancas.exception.ErroAutenticacao;
 import com.victor.minhasfinancas.exception.RegraNegocioException;
 import com.victor.minhasfinancas.model.entity.Usuario;
+import com.victor.minhasfinancas.service.LancamentoService;
 import com.victor.minhasfinancas.service.UsuarioService;
 
 @RestController
@@ -21,6 +26,9 @@ public class UsuarioController {
 
 	@Autowired
 	private UsuarioService service;
+	
+	@Autowired
+	private LancamentoService lancamentoService;
 	
 	@PostMapping("/autenticar")
 	public ResponseEntity autenticar(@RequestBody UsuarioDTO dto) {
@@ -46,5 +54,15 @@ public class UsuarioController {
 		}catch (RegraNegocioException e){
 			return ResponseEntity.badRequest().body(e.getMessage());
 		}
+	}
+	
+	@GetMapping("{id}/saldo")
+	public ResponseEntity obterSaldo(@PathVariable("id") Long id) {
+		Optional<Usuario> usuario = service.obterPorId(id);
+		if(!usuario.isPresent()) {
+			return new ResponseEntity(HttpStatus.NOT_FOUND);
+		}
+		BigDecimal saldo = lancamentoService.obterSaldoPorUsuario(id);
+		return ResponseEntity.ok(saldo);
 	}
 }
