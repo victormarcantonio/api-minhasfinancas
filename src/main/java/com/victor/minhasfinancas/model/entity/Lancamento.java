@@ -24,7 +24,9 @@ import com.victor.minhasfinancas.model.enums.TipoLancamento;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Table (name= "lancamento", schema="financas")
 @Entity
@@ -32,6 +34,8 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Getter 
+@Setter
 public class Lancamento {
 
 	@Id 

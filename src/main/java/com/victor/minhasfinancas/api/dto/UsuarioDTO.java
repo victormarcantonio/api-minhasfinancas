@@ -13,6 +13,7 @@ import lombok.Setter;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+
 public class UsuarioDTO {
 
 	private String email;
